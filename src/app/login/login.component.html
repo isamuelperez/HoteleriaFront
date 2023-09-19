@@ -1,0 +1,61 @@
+<div class="grid">
+  <div class="flex">
+    <div class="p-fluid">
+      <form action="" [formGroup]="loginForm">
+        <label for="" class="display-1 mb-5">Login</label>
+        <div class="field">
+          <label for="username">Username</label>
+          <input
+            pInputText
+            id="username"
+            type="text"
+            formControlName="userName"
+          />
+          <div
+          *ngIf="
+            loginForm.controls['userName'].invalid &&
+            loginForm.controls['userName'].touched
+          "
+        >
+          <small
+            class="text-danger text-sm"
+            *ngIf="loginForm.controls['userName'].errors"
+          >
+            Campo requerido
+          </small>
+        </div>
+        </div>
+        <div class="field flex">
+          <label for="password">Password</label>
+          <input
+            pInputText
+            id="password"
+            type="password"
+            formControlName="password"
+          />
+          <div
+            *ngIf="
+              loginForm.controls['password'].invalid &&
+              loginForm.controls['password'].touched
+            "
+          >
+            <small
+              class="text-danger text-sm"
+              *ngIf="loginForm.controls['password'].errors"
+            >
+              Campo requerido
+            </small>
+          </div>
+        </div>
+        <div class="mt-3">
+          <p-button label="Login" [disabled]="!loginForm.valid" (onClick)="onSubmit()"></p-button>
+          <p-button
+            label="Sign Up"
+            icon="pi pi-user-plus"
+            styleClass="p-button-success mt-3"
+          ></p-button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
