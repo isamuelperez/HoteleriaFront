@@ -1,1 +1,147 @@
-<p>home works!</p>
+<div class="container">
+  <p class="fs-1 text-center">HOTELES EL VIAJERO</p>
+  <div class="text-center">
+    <p-dropdown
+      [options]="cities"
+      placeholder="Ciudad"
+      [filter]="true"
+      filterBy="name"
+      [showClear]="true"
+      optionLabel="name"
+      (onChange)="selectCiy($event)"
+    ></p-dropdown>
+  </div>
+  <div class="row">
+    <div class="card" style="width: 20rem" *ngFor="let hotel of hoteles">
+      <img
+        class="card-img-top mt-2 ml-2"
+        [src]="hotel.image"
+        width="10px"
+        height="210"
+      />
+      <div class="card-body">
+        <h5 class="card-title">{{ hotel.name }}</h5>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <i class="pi pi-globe" style="color: cyan"></i>
+          {{ hotel.location.city }}
+        </li>
+        <li class="list-group-item">
+          <img
+            src="https://www.svgrepo.com/show/509148/location-pin.svg"
+            alt="location"
+            width="20px"
+          />
+          {{ hotel.location.address }}
+        </li>
+        <li class="list-group-item">
+          <img
+            src="https://www.svgrepo.com/show/490316/room.svg"
+            alt="room"
+            height="20px"
+          />
+          {{ hotel.rooms.length }}
+        </li>
+      </ul>
+      <button
+        type="button"
+        [disabled]="hotel.eneable"
+        class="btn btn-outline-primary"
+        (click)="viewHotel(hotel)"
+      >
+        Ver Detalles
+      </button>
+    </div>
+  </div>
+</div>
+
+<p-dialog [(visible)]="display" [style]="{ width: '60vw' }">
+  <ng-template pTemplate="header"> {{ title_modal }}</ng-template>
+
+  <p-table
+    #dt
+    styleClass="p-datatable-sm"
+    [rowHover]="true"
+    [value]="rooms"
+    [(selection)]="rooms"
+    [globalFilterFields]="['name', 'type', 'location', 'enabled', 'maxCount']"
+    dataKey="id"
+    [rowHover]="true"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 50]"
+    [paginator]="true"
+  >
+    <ng-template pTemplate="caption">
+      <div class="table-header flex">
+        <h3 class="flex-grow">Habitaciones</h3>
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            #query
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal(query.value, 'contains')"
+            placeholder="Búsqueda Global"
+          />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th></th>
+        <th pSortableColumn="name">
+          HABITACIÓN<p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="type">
+          TIPO<p-sortIcon field="type"></p-sortIcon>
+        </th>
+        <th pSortableColumn="location">
+          UBICACIÓN<p-sortIcon field="location"></p-sortIcon>
+        </th>
+        <th pSortableColumn="maxCount">
+          MAX DE PERSONAS<p-sortIcon field="maxCount"></p-sortIcon>
+        </th>
+        <th pSortableColumn="">PRECIO</th>
+        <th pSortableColumn="enabled">
+          Estado<p-sortIcon field="enabled"></p-sortIcon>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-room>
+      <tr>
+        <td>
+          <button class="border border-solid border-gray-400 rounded-lg p-1">
+            <i
+              class="pi pi-ellipsis-v"
+              (click)="openMenu(room, $event)"
+            ></i>
+          </button>
+        </td>
+        <td>{{ room.name }}</td>
+        <td>{{ room.type }}</td>
+        <td>{{ room.location }}</td>
+        <td>{{ room.maxCount }}</td>
+        <td>{{ room.baseCost + room.duty }}</td>
+        <td *ngIf="room.enabled; else inactivo">DISPONIBLE</td>
+        <ng-template #inactivo>
+          <td>NO DISPONIBLE</td>
+        </ng-template>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      label="CANCELAR"
+      class="p-button-outlined"
+      (click)="close()"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<div class="text-center">
+  <p-menu #menu [model]="items" [popup]="true"></p-menu>
+</div>

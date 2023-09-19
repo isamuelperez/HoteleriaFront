@@ -13,13 +13,21 @@ import { DividerModule } from 'primeng/divider';
 import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { HomeComponent } from './home/home.component';
+import { DialogModule } from 'primeng/dialog';
+import { PaginatorModule } from 'primeng/paginator';
+import { TableModule } from 'primeng/table';
+import { TabViewModule } from 'primeng/tabview';
+import { BookingComponent } from './booking/booking.component';
+import { MenuModule } from 'primeng/menu';
+import { CalendarModule } from 'primeng/calendar';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    BookingComponent
   ],
   imports: [
     BrowserModule,
@@ -32,6 +40,12 @@ import { HomeComponent } from './home/home.component';
     InputTextModule,
     ButtonModule,
     DividerModule,
+    DialogModule,
+    TableModule,
+    PaginatorModule,
+    TabViewModule,
+    MenuModule,
+    CalendarModule,
     ToastrModule.forRoot(),
   ],
   providers: [],

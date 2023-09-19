@@ -1,0 +1,218 @@
+<div class="grid">
+  <div class="">
+    <div class="p-fluid">
+      <form action="" [formGroup]="bookingForm">
+        <label for="" class="display-1 mb-3">RESERVACIÓN</label>
+        <div>
+          <div class="field">
+            <label for="name">Nombres</label>
+            <input pInputText id="name" type="text" formControlName="name" />
+            <div
+              *ngIf="
+                bookingForm.controls['name'].invalid &&
+                bookingForm.controls['name'].touched
+              "
+            >
+              <small
+                class="text-danger text-sm"
+                *ngIf="bookingForm.controls['name'].errors"
+              >
+                Campo requerido
+              </small>
+            </div>
+          </div>
+          <div class="field">
+            <label for="surName">Apelldos</label>
+            <input
+              pInputText
+              id="surName"
+              type="text"
+              formControlName="surName"
+            />
+            <div
+              *ngIf="
+                bookingForm.controls['surName'].invalid &&
+                bookingForm.controls['surName'].touched
+              "
+            >
+              <small
+                class="text-danger text-sm"
+                *ngIf="bookingForm.controls['surName'].errors"
+              >
+                Campo requerido
+              </small>
+            </div>
+          </div>
+          <div class="field">
+            <label for="documentType">Tipo de Documento</label>
+            <p-dropdown
+              [options]="documentTypes"
+              placeholder="tipo de documento"
+              [filter]="true"
+              filterBy="name"
+              [showClear]="true"
+              optionLabel="name"
+              optionValue="id"
+              formControlName="documentType"
+            ></p-dropdown>
+            <div
+              *ngIf="
+                bookingForm.controls['documentType'].invalid &&
+                bookingForm.controls['documentType'].touched
+              "
+            >
+              <small
+                class="text-danger text-sm"
+                *ngIf="bookingForm.controls['documentType'].errors"
+              >
+                Campo requerido
+              </small>
+            </div>
+          </div>
+          <div class="field">
+            <label for="numberDocument">Numero de Documento</label>
+            <input pInputText id="numberDocument" type="number" formControlName="numberDocument" />
+            <div
+              *ngIf="
+                bookingForm.controls['numberDocument'].invalid &&
+                bookingForm.controls['numberDocument'].touched
+              "
+            >
+              <small
+                class="text-danger text-sm"
+                *ngIf="bookingForm.controls['numberDocument'].errors"
+              >
+                Campo requerido
+              </small>
+            </div>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input pInputText id="email" type="email" formControlName="email" />
+            <div
+              *ngIf="
+                bookingForm.controls['email'].invalid &&
+                bookingForm.controls['email'].touched
+              "
+            >
+              <small
+                class="text-danger text-sm"
+                *ngIf="bookingForm.controls['email'].errors"
+              >
+                Campo requerido
+              </small>
+            </div>
+          </div>
+          <div class="field">
+            <label for="email">Tefefono</label>
+            <input pInputText id="phone" type="tel" formControlName="phone" />
+            <div
+              *ngIf="
+                bookingForm.controls['phone'].invalid &&
+                bookingForm.controls['phone'].touched
+              "
+            >
+              <small
+                class="text-danger text-sm"
+                *ngIf="bookingForm.controls['phone'].errors"
+              >
+                Campo requerido
+              </small>
+            </div>
+          </div>
+          <div class="field">
+            <label for="gender">Genero</label>
+            <p-dropdown
+              [options]="genders"
+              placeholder="Genero"
+              [filter]="true"
+              filterBy="name"
+              [showClear]="true"
+              optionLabel="name"
+              optionValue="id"
+              formControlName="gender"
+            ></p-dropdown>
+            <div
+              *ngIf="
+                bookingForm.controls['gender'].invalid &&
+                bookingForm.controls['gender'].touched
+              "
+            >
+              <small
+                class="text-danger text-sm"
+                *ngIf="bookingForm.controls['gender'].errors"
+              >
+                Campo requerido
+              </small>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="email">Fecha de Nacimiento</label>
+            <p-calendar formControlName="birthDate" [showIcon]="true"></p-calendar>
+            <div
+              *ngIf="
+                bookingForm.controls['birthDate'].invalid &&
+                bookingForm.controls['birthDate'].touched
+              "
+            >
+              <small
+                class="text-danger text-sm"
+                *ngIf="bookingForm.controls['birthDate'].errors"
+              >
+                Campo requerido
+              </small>
+            </div>
+          </div>
+
+
+
+        </div>
+        <h2 class="text-center mt-3">Contacto de Emergencia</h2>
+        <div>
+          <div class="field">
+            <label for="nameEmergncy">Nombre Completo</label>
+            <input pInputText id="nameEmergncy" type="text" formControlName="nameEmergncy" />
+            <div
+              *ngIf="
+                bookingForm.controls['nameEmergncy'].invalid &&
+                bookingForm.controls['nameEmergncy'].touched
+              "
+            >
+              <small
+                class="text-danger text-sm"
+                *ngIf="bookingForm.controls['nameEmergncy'].errors"
+              >
+                Campo requerido
+              </small>
+            </div>
+          </div>
+          <div class="field">
+            <label for="phoneEmergncy">Telefono</label>
+            <input pInputText id="phoneEmergncy" type="tel" formControlName="phoneEmergncy" />
+            <div
+              *ngIf="
+                bookingForm.controls['phoneEmergncy'].invalid &&
+                bookingForm.controls['phoneEmergncy'].touched
+              "
+            >
+              <small
+                class="text-danger text-sm"
+                *ngIf="bookingForm.controls['phoneEmergncy'].errors"
+              >
+                Campo requerido
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="mt-3">
+          <p-button
+            label="Reservar"
+            [disabled]="!bookingForm.valid"
+            (onClick)="onSubmit()"
+          ></p-button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
