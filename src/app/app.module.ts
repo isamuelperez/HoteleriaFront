@@ -20,6 +20,11 @@ import { TabViewModule } from 'primeng/tabview';
 import { BookingComponent } from './booking/booking.component';
 import { MenuModule } from 'primeng/menu';
 import { CalendarModule } from 'primeng/calendar';
+import {CookieService} from 'ngx-cookie-service';
+import { RoomComponent } from './room/room.component';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { HotelComponent } from './hotel/hotel.component';
+
 
 
 @NgModule({
@@ -27,7 +32,9 @@ import { CalendarModule } from 'primeng/calendar';
     AppComponent,
     LoginComponent,
     HomeComponent,
-    BookingComponent
+    BookingComponent,
+    RoomComponent,
+    HotelComponent
   ],
   imports: [
     BrowserModule,
@@ -46,9 +53,10 @@ import { CalendarModule } from 'primeng/calendar';
     TabViewModule,
     MenuModule,
     CalendarModule,
+    InputSwitchModule,
     ToastrModule.forRoot(),
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

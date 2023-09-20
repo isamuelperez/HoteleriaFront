@@ -8,6 +8,7 @@ import {
 import { LoginService } from './services/login.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,8 @@ export class LoginComponent implements OnInit {
     private readonly builder: FormBuilder,
     private readonly _loginService: LoginService,
     private readonly _toastr: ToastrService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly _cookieService: CookieService
   ) {}
 
   ngOnInit() {
@@ -58,6 +60,9 @@ export class LoginComponent implements OnInit {
               userName: null,
               password: null
             })
+
+            this._cookieService.set('token',res.data.token );
+
 
             this.router.navigate(['/home'])
           }

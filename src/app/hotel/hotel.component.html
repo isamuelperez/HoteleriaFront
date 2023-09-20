@@ -1,0 +1,191 @@
+
+<p-table
+  #dt
+  styleClass="p-datatable-sm"
+  [rowHover]="true"
+  [value]="hoteles"
+  [(selection)]="hoteles"
+  [globalFilterFields]="['name', 'type', 'location', 'enabled', 'maxCount']"
+  dataKey="id"
+  [rowHover]="true"
+  [rows]="10"
+  [showCurrentPageReport]="true"
+  [rowsPerPageOptions]="[10, 20, 50]"
+  [paginator]="true"
+>
+  <ng-template pTemplate="caption">
+    <div class="table-header d-flex">
+      <label for="" class="fs-1 pb-3">HOTELES</label>
+    </div>
+    <div class="text-center">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          #query
+          pInputText
+          type="text"
+          (input)="dt.filterGlobal(query.value, 'contains')"
+          placeholder="Búsqueda Global"
+        />
+      </span>
+      <p-button
+        class="p-2"
+        label="Agregar Hotel"
+        [disabled]=""
+        (onClick)="add()"
+      ></p-button>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th></th>
+      <th pSortableColumn="name">
+        NOMBRE<p-sortIcon field="name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="location.city">CIUDAD<p-sortIcon field="location.city"></p-sortIcon></th>
+      <th pSortableColumn="location.address">
+        DIRRECIÓN<p-sortIcon field="location.address"></p-sortIcon>
+      </th>
+      <th pSortableColumn="enabled">
+        ESTADO<p-sortIcon field="enabled"></p-sortIcon>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-hotel>
+    <tr>
+      <td>
+        <button class="border border-solid border-gray-400 rounded-lg p-1">
+          <i class="pi pi-ellipsis-v" (click)="openMenu(hotel, $event)"></i>
+        </button>
+      </td>
+      <td>{{ hotel.name }}</td>
+      <td>{{ hotel.location.city }}</td>
+      <td>{{ hotel.location.address }}</td>
+      <td *ngIf="hotel.enabled; else inactivo">DISPONIBLE</td>
+      <ng-template #inactivo>
+        <td>NO DISPONIBLE</td>
+      </ng-template>
+    </tr>
+  </ng-template>
+</p-table>
+
+
+<p-dialog [(visible)]="display" [style]="{ width: '60vw' }">
+  <div class="grid">
+    <div class="">
+      <div class="p-fluid">
+        <form action="" [formGroup]="formHotel">
+          <label for="" class="display-1 mb-3 text-center">{{ title_modal }}</label>
+          <div>
+            <div class="field">
+              <label for="name">Nombre</label>
+              <input pInputText id="name" type="text" formControlName="name" />
+              <div
+                *ngIf="
+                  formHotel.controls['name'].invalid &&
+                  formHotel.controls['name'].touched
+                "
+              >
+                <small
+                  class="text-danger text-sm"
+                  *ngIf="formHotel.controls['name'].errors"
+                >
+                  Campo requerido
+                </small>
+              </div>
+            </div>
+            <div class="field">
+              <label for="image">Imaigen</label>
+              <input pInputText id="image" type="text" formControlName="image" />
+              <div
+                *ngIf="
+                  formHotel.controls['image'].invalid &&
+                  formHotel.controls['image'].touched
+                "
+              >
+                <small
+                  class="text-danger text-sm"
+                  *ngIf="formHotel.controls['image'].errors"
+                >
+                  Campo requerido
+                </small>
+              </div>
+            </div>
+            <hr />
+            <div class="field">
+              <label for="city">Ciudad</label>
+              <input pInputText id="city" type="text" formControlName="city" />
+              <div
+                *ngIf="
+                  formHotel.controls['city'].invalid &&
+                  formHotel.controls['city'].touched
+                "
+              >
+                <small
+                  class="text-danger text-sm"
+                  *ngIf="formHotel.controls['city'].errors"
+                >
+                  Campo requerido
+                </small>
+              </div>
+            </div>
+            <div class="field">
+              <label for="address">Direccion</label>
+              <input
+                pInputText
+                id="address"
+                type="text"
+                formControlName="address"
+              />
+              <div
+                *ngIf="
+                  formHotel.controls['address'].invalid &&
+                  formHotel.controls['address'].touched
+                "
+              >
+                <small
+                  class="text-danger text-sm"
+                  *ngIf="formHotel.controls['address'].errors"
+                >
+                  Campo requerido
+                </small>
+              </div>
+            </div>
+            <label class="pl-3" for="">Estado</label>
+            <div class="mt-3 field d-flex">
+              <p-inputSwitch formControlName="enabled"></p-inputSwitch>
+              <small
+                class="text-primary text-sm m-3"
+                *ngIf="formHotel.controls['enabled'].value"
+              >
+                (Disponible)
+              </small>
+              <small
+                class="text-danger text-sm m-3"
+                *ngIf="!formHotel.controls['enabled'].value"
+              >
+                (NO Disponible)
+              </small>
+            </div>
+          </div>
+          <hr />
+          <div class="mt-3">
+            <p-button
+              label="Guardar"
+              (onClick)="onSubmit()"
+              [disabled]="formHotel.invalid"
+            ></p-button>
+            <p-button styleClass="mt-3" label="Cancelar" (onClick)="cancel()"></p-button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<div class="text-center">
+  <p-menu #menu [model]="items" [popup]="true"></p-menu>
+</div>
+
+
+

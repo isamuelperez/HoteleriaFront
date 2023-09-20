@@ -1,6 +1,6 @@
 <div class="container">
   <p class="fs-1 text-center">HOTELES EL VIAJERO</p>
-  <div class="text-center">
+  <div class="text-center ml-3">
     <p-dropdown
       [options]="cities"
       placeholder="Ciudad"
@@ -10,8 +10,9 @@
       optionLabel="name"
       (onChange)="selectCiy($event)"
     ></p-dropdown>
+    <p-button class="p-3" label="Gestionar Hoteles" (onClick)="addHotel()"></p-button>
   </div>
-  <div class="row">
+  <div class="row mt-3">
     <div class="card" style="width: 20rem" *ngFor="let hotel of hoteles">
       <img
         class="card-img-top mt-2 ml-2"
@@ -86,6 +87,11 @@
             placeholder="Búsqueda Global"
           />
         </span>
+        <p-button
+          class="p-2"
+          label="Asignar Habitación"
+          [disabled]=""
+        ></p-button>
       </div>
     </ng-template>
     <ng-template pTemplate="header">
@@ -105,7 +111,7 @@
         </th>
         <th pSortableColumn="">PRECIO</th>
         <th pSortableColumn="enabled">
-          Estado<p-sortIcon field="enabled"></p-sortIcon>
+          ESTADO<p-sortIcon field="enabled"></p-sortIcon>
         </th>
       </tr>
     </ng-template>
@@ -113,10 +119,7 @@
       <tr>
         <td>
           <button class="border border-solid border-gray-400 rounded-lg p-1">
-            <i
-              class="pi pi-ellipsis-v"
-              (click)="openMenu(room, $event)"
-            ></i>
+            <i class="pi pi-ellipsis-v" (click)="openMenu(room, $event)"></i>
           </button>
         </td>
         <td>{{ room.name }}</td>
