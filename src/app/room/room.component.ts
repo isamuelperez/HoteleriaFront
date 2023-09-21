@@ -38,12 +38,16 @@ export class RoomComponent implements OnInit {
   display: boolean = false;
   title_modal: string = '';
 
-  assignRoom : boolean = false;
+  assignRoom: boolean = false;
   hoteles: Array<any> = [];
-  rooms : Array<any> = [];
+  rooms: Array<any> = [];
   title_room: string = '';
 
+  hotel: any = null;
+
   roomSelect: any = null;
+
+  addNew: boolean = false;
 
   items: MenuItem[] = [];
   @ViewChild('menu') menu!: Menu;
@@ -76,26 +80,56 @@ export class RoomComponent implements OnInit {
       location: ['', [Validators.required]],
       enabled: [false, [Validators.required]],
       maxCount: ['', [Validators.required]],
-      selectHotel:[''],
+      selectHotel: [''],
+      hotel: [''],
     });
   }
 
+  HotelSelect(hotel: any) {
+    console.log(hotel);
+    this.hotel = hotel;
+  }
+
   onSubmit() {
-    if(this.id_room==null){
-      this._roomService
-      .createRoom(this.roomForm.value)
-      .subscribe({
+    if (this.id_room == null) {
+      this._roomService.createRoom(this.roomForm.value).subscribe({
         error: (error) => {
-          this._toastr.error(error.error.message, 'Error')
+          this._toastr.error(error.error.message, 'Error');
           throw error;
         },
         next: (res) => {
-          if(res.status==200){
-            this._toastr.success(res.message, 'Se Creo la Habitacion')
+          if (res.status == 200) {
+            this._toastr.success(res.message, 'Se Creo la Habitación');
+            this.roomForm.reset();
+            this._roomService.getRooms().subscribe((res) => {
+              this.rooms = res.data;
+            });
           }
-      }});
-    }else{
-      console.log("modificar")
+        },
+      });
+    } else {
+      if (this.hotel != null) {
+        this._roomService
+          .updateRoom(this.roomForm.value, this.id_room, this.hotel)
+          .subscribe({
+            error: (error) => {
+              this._toastr.error(error.error.message, 'Error');
+              throw error;
+            },
+            next: (res) => {
+              if (res.status == 200) {
+                this._toastr.success(res.message, 'Se modifico la Habitacion');
+                this._roomService.getRooms().subscribe((res) => {
+                  this.rooms = res.data;
+                });
+                this.display = false;
+              }
+            },
+          });
+
+      }else{
+        this._toastr.info('Mensaje', 'Seleccione un hotel');
+      }
     }
   }
 
@@ -108,7 +142,7 @@ export class RoomComponent implements OnInit {
         id: room.id,
         command: (event) => {
           let { item } = event;
-          this.title_modal = 'Modificar Habitacion';
+          this.title_modal = 'Modificar Habitación';
           this.edit(room);
         },
       },
@@ -125,39 +159,38 @@ export class RoomComponent implements OnInit {
     this.menu.toggle(event);
   }
 
-  assign(room: any){
+  assign(room: any) {
     this.roomForm.patchValue({
-      selectHotel: ''
-    })
+      selectHotel: '',
+    });
     this.roomSelect = room;
     this.title_room = room.name;
     this.assignRoom = false;
     this.assignRoom = true;
-
   }
 
-  closeAssign(){
+  closeAssign() {
     this.assignRoom = false;
   }
 
-  onSubmitAssignHotel(){
-
-  }
+  onSubmitAssignHotel() {}
 
   add() {
+    this.addNew = true;
     this.id_room = null;
     this.display = false;
-    this.title_modal = 'Agregar Habitacion';
+    this.title_modal = 'Agregar Habitación';
     this.roomForm.reset();
     this.display = true;
   }
 
   edit(room: any) {
+    this.addNew = false;
     this.id_room = room.id;
     this.display = false;
     this.roomForm.reset();
     this.display = true;
-    this.roomForm.patchValue( room );
+    this.roomForm.patchValue(room);
   }
 
   close() {
@@ -166,15 +199,15 @@ export class RoomComponent implements OnInit {
   typeRoom(id: number): string {
     switch (id) {
       case 0:
-        return "Individual";
+        return 'Individual';
       case 1:
-        return "Doble";
+        return 'Doble';
       case 2:
-        return "Matrimonial";
+        return 'Matrimonial';
       case 3:
-        return "Familiar";
+        return 'Familiar';
       default:
-        return "No existe";
+        return 'No existe';
     }
   }
 }

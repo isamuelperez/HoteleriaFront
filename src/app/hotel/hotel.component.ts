@@ -53,11 +53,30 @@ export class HotelComponent implements OnInit {
           if (res.status == 200) {
             this._toastr.success(res.message, 'Se Creo El Hotel');
             this.formHotel.reset();
+            this._hotelService.gethotels().subscribe((res) => {
+              this.hoteles = res.data;
+            });
           }
         },
       });
     } else {
       console.log('Modificar');
+      this._hotelService.updatethotel(this.formHotel.value, this.id_hotel).subscribe({
+        error: (error) => {
+          this._toastr.error(error.error.message, 'Error');
+          throw error;
+        },
+        next: (res) => {
+          if (res.status == 200) {
+            this._toastr.success(res.message, 'Se modifico El Hotel');
+            this.formHotel.reset();
+            this.display=false;
+            this._hotelService.gethotels().subscribe((res) => {
+              this.hoteles = res.data;
+            });
+          }
+        },
+      });
     }
   }
 

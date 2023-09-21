@@ -48,8 +48,12 @@
       <th pSortableColumn="maxCount">
         MAX DE PERSONAS<p-sortIcon field="maxCount"></p-sortIcon>
       </th>
-      <th pSortableColumn="">COSTO BASE</th>
-      <th pSortableColumn="">IMPUESTO</th>
+      <th pSortableColumn="baseCost">
+        COSTO BASE <p-sortIcon field="baseCost"></p-sortIcon>
+      </th>
+      <th pSortableColumn="duty">
+        IMPUESTO <p-sortIcon field="duty"></p-sortIcon>
+      </th>
       <th pSortableColumn="">PRECIO</th>
       <th pSortableColumn="enabled">
         ESTADO<p-sortIcon field="enabled"></p-sortIcon>
@@ -79,12 +83,39 @@
 </p-table>
 
 <p-dialog [(visible)]="display" [style]="{ width: '60vw' }">
-  <ng-template pTemplate="header"> {{ title_modal }}</ng-template>
+  <label for="" class="display-1 mb-3 text-center">{{ title_modal }}</label>
   <div class="grid">
     <div class="">
       <div class="p-fluid">
         <form action="" [formGroup]="roomForm">
           <div>
+
+            <div *ngIf="addNew" class="field">
+              <label for="hotel">Hotel</label>
+              <p-dropdown
+                [options]="hoteles"
+                placeholder="Seleccione un hotel"
+                [filter]="true"
+                filterBy="name"
+                [showClear]="true"
+                optionLabel="name"
+                (onChange)="HotelSelect($event)"
+                formControlName="hotel"
+              ></p-dropdown>
+              <div
+                *ngIf="
+                  roomForm.controls['hotel'].invalid &&
+                  roomForm.controls['hotel'].touched
+                "
+              >
+                <small
+                  class="text-danger text-sm"
+                  *ngIf="roomForm.controls['hotel'].errors"
+                >
+                  Campo requerido
+                </small>
+              </div>
+            </div>
             <div class="field">
               <label for="name">Nombre</label>
               <input pInputText id="name" type="text" formControlName="name" />

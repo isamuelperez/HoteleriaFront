@@ -10,7 +10,11 @@
       optionLabel="name"
       (onChange)="selectCiy($event)"
     ></p-dropdown>
-    <p-button class="p-3" label="Gestionar Hoteles" (onClick)="addHotel()"></p-button>
+    <p-button
+      class="p-3"
+      label="Gestionar Hoteles"
+      (onClick)="addHotel()"
+    ></p-button>
   </div>
   <div class="row mt-3">
     <div class="card" style="width: 20rem" *ngFor="let hotel of hoteles">
@@ -47,7 +51,7 @@
       </ul>
       <button
         type="button"
-        [disabled]="hotel.eneable"
+        [disabled]="!hotel.enabled"
         class="btn btn-outline-primary"
         (click)="viewHotel(hotel)"
       >
@@ -59,7 +63,6 @@
 
 <p-dialog [(visible)]="display" [style]="{ width: '60vw' }">
   <ng-template pTemplate="header"> {{ title_modal }}</ng-template>
-
   <p-table
     #dt
     styleClass="p-datatable-sm"
@@ -90,7 +93,7 @@
         <p-button
           class="p-2"
           label="Asignar Habitación"
-          [disabled]=""
+          (onClick)="assingRoom()"
         ></p-button>
       </div>
     </ng-template>
@@ -143,6 +146,91 @@
       (click)="close()"
     ></button>
   </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="assing" [style]="{ width: '60vw' }">
+  <ng-template pTemplate="header">
+    Asginar Habitacion a {{ title_modal }}</ng-template
+  >
+  <p-table
+    #dt
+    styleClass="p-datatable-sm"
+    [rowHover]="true"
+    [value]="roomsAll"
+    [(selection)]="roomsAll"
+    [globalFilterFields]="['name', 'type', 'location', 'enabled', 'maxCount']"
+    dataKey="id"
+    [rowHover]="true"
+    [rows]="10"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 50]"
+    [paginator]="true"
+  >
+    <ng-template pTemplate="caption">
+      <div class="table-header d-flex">
+        <label for="" class="fs-1 pb-3">HABITACIONES</label>
+      </div>
+      <div class="text-center">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            #query
+            pInputText
+            type="text"
+            (input)="dt.filterGlobal(query.value, 'contains')"
+            placeholder="Búsqueda Global"
+          />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th></th>
+        <th pSortableColumn="name">
+          HABITACIÓN<p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="type">
+          TIPO<p-sortIcon field="type"></p-sortIcon>
+        </th>
+        <th pSortableColumn="location">
+          UBICACIÓN<p-sortIcon field="location"></p-sortIcon>
+        </th>
+        <th pSortableColumn="maxCount">
+          MAX DE PERSONAS<p-sortIcon field="maxCount"></p-sortIcon>
+        </th>
+        <th pSortableColumn="baseCost">
+          COSTO BASE <p-sortIcon field="baseCost"></p-sortIcon>
+        </th>
+        <th pSortableColumn="duty">
+          IMPUESTO <p-sortIcon field="duty"></p-sortIcon>
+        </th>
+        <th pSortableColumn="">PRECIO</th>
+        <th pSortableColumn="enabled">
+          ESTADO<p-sortIcon field="enabled"></p-sortIcon>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-room>
+      <tr>
+        <td>
+          <button class="border border-solid border-gray-400 rounded-lg p-1">
+            <i class="pi pi-ellipsis-v" (click)="openAssing(room, $event)"></i>
+          </button>
+        </td>
+        <td>{{ room.name }}</td>
+        <td>{{ typeRoom(room.type) }}</td>
+        <td>{{ room.location }}</td>
+        <td>{{ room.maxCount }}</td>
+        <td>{{ room.baseCost }}</td>
+        <td>{{ room.duty }}</td>
+        <td>{{ room.baseCost + room.duty }}</td>
+        <td *ngIf="room.enabled; else inactivo">DISPONIBLE</td>
+        <ng-template #inactivo>
+          <td>NO DISPONIBLE</td>
+        </ng-template>
+      </tr>
+    </ng-template>
+  </p-table>
 </p-dialog>
 
 <div class="text-center">

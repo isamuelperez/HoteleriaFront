@@ -14,6 +14,13 @@ export class RoomService {
     return this.http.post(`${environment.host}/Room/create`, room);
   }
 
+
+  updateRoom(room: any, id: number, hotel: any): Observable<any> {
+    room.id = id;
+    room.hotel=hotel;
+    return this.http.post(`${environment.host}/Room/update`, room);
+  }
+
   getRooms(): Observable<any> {
     return this.http.get(`${environment.host}/Room/getAll/`);
   }
