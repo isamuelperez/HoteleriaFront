@@ -49,6 +49,8 @@ export class RoomComponent implements OnInit {
 
   addNew: boolean = false;
 
+  sesionActive: boolean = false;
+
   items: MenuItem[] = [];
   @ViewChild('menu') menu!: Menu;
 
@@ -61,6 +63,14 @@ export class RoomComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    const userJSON = sessionStorage.getItem('user');
+    if (userJSON !== null) {
+      const user = JSON.parse(userJSON);
+      this.sesionActive = true;
+    } else {
+      console.log('no inicio sesion');
+      this.sesionActive = false;
+    }
     this.roomForm = this.buildForm();
     this._htelService.gethotels().subscribe((res) => {
       this.hoteles = res.data;
@@ -80,8 +90,7 @@ export class RoomComponent implements OnInit {
       location: ['', [Validators.required]],
       enabled: [false, [Validators.required]],
       maxCount: ['', [Validators.required]],
-      selectHotel: [''],
-      hotel: [''],
+      hotelId: [null, [Validators.required]]
     });
   }
 
@@ -108,9 +117,8 @@ export class RoomComponent implements OnInit {
         },
       });
     } else {
-      if (this.hotel != null) {
-        this._roomService
-          .updateRoom(this.roomForm.value, this.id_room, this.hotel)
+      this._roomService
+          .updateRoom(this.roomForm.value, this.id_room)
           .subscribe({
             error: (error) => {
               this._toastr.error(error.error.message, 'Error');
@@ -126,10 +134,6 @@ export class RoomComponent implements OnInit {
               }
             },
           });
-
-      }else{
-        this._toastr.info('Mensaje', 'Seleccione un hotel');
-      }
     }
   }
 
@@ -144,15 +148,6 @@ export class RoomComponent implements OnInit {
           let { item } = event;
           this.title_modal = 'Modificar Habitación';
           this.edit(room);
-        },
-      },
-      {
-        label: 'Asignar Habitación',
-        icon: undefined,
-        id: room.id,
-        command: (event) => {
-          let { item } = event;
-          this.assign(room);
         },
       },
     ];
@@ -191,11 +186,16 @@ export class RoomComponent implements OnInit {
     this.roomForm.reset();
     this.display = true;
     this.roomForm.patchValue(room);
+    this.roomForm.patchValue({
+      hotelId: room.hotel.id
+    })
+    console.log(room.hotel.name)
   }
 
   close() {
     this.display = false;
   }
+
   typeRoom(id: number): string {
     switch (id) {
       case 0:

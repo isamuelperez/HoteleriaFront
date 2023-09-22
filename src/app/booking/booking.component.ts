@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { BookingService } from './services/booking.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-booking',
@@ -14,46 +16,60 @@ export class BookingComponent implements OnInit {
   genders: Array<any> = [
     {
       name: 'Masculino',
-      id: 1,
+      id: 0,
     },
     {
       name: 'Femenino',
-      id: 2,
+      id: 1,
     },
   ];
 
   documentTypes: Array<any> = [
     {
       name: 'Cedula de Ciudadania',
-      id: 1,
+      id: 0,
     },
     {
       name: 'Tarjeta de Indentidad',
-      id: 2,
+      id: 1,
     },
     {
       name: 'Pasaporte',
-      id: 3,
+      id: 2,
     },
     {
       name: 'Cedula de Extranjera',
-      id: 4,
+      id: 3,
     },
   ]
 
   submitted = false;
 
+  sesionActive: boolean = false;
+
   constructor(
     private readonly builder: FormBuilder,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly _bookingService: BookingService,
+    private readonly _toastr: ToastrService,
   ) {}
 
   ngOnInit() {
+    const userJSON = sessionStorage.getItem('user');
+    if (userJSON !== null) {
+      const user = JSON.parse(userJSON);
+      this.sesionActive = true;
+    } else {
+      this._toastr.error('Inicie Sesion', 'inicar sesion');
+      console.log('no inicio sesion');
+      this.sesionActive = false;
+    }
     this.bookingForm = this.buildForm();
   }
 
   private buildForm(): FormGroup {
     return this.builder.group({
+      //cliente
       name: ['', [Validators.required]],
       surName: ['', [Validators.required]],
       gender: ['', [Validators.required]],
@@ -62,12 +78,37 @@ export class BookingComponent implements OnInit {
       documentType: ['', [Validators.required]],
       phone: ['', [Validators.required]],
       birthDate: ['', [Validators.required]],
-      nameEmergncy: ['', [Validators.required]],
-      phoneEmergncy: ['', [Validators.required]],
+      //
+      //contacto de emergencia
+      fullName: ['', [Validators.required]],
+      numberContact: ['', [Validators.required]],
+      //
+      //reserva
+      initDate: ['', [Validators.required]],
+      endDate: ['', [Validators.required]],
+      personCount : ['', [Validators.required]],
     });
   }
 
   onSubmit() {
-    //this.router.navigate(['/booking']);
+    if(this._bookingService.room!=null){
+      this._bookingService.createReservation(this.bookingForm.value).subscribe({
+        error: (error) => {
+          this._toastr.error(error.error.message, 'Error');
+          throw error;
+        },
+        next: (res) => {
+          if (res.status == 200) {
+            this._toastr.success(res.message, 'Se Creo El Hotel');
+            this.bookingForm.reset();
+            this._bookingService.setHotel(null, null);
+            this.router.navigate(['/home']);
+          }
+        },
+      });
+    }else{
+      this._toastr.error("Seleccione una habitacion de un hotel", 'Error');
+      this.router.navigate(['/home']);
+    }
   }
 }

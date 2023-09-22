@@ -7,6 +7,7 @@ import { SharedService } from '../services/shared.service';
 import { HotelService } from '../hotel/services/hotel.service';
 import { RoomService } from '../room/services/room.service';
 import { ToastrService } from 'ngx-toastr';
+import { BookingService } from '../booking/services/booking.service';
 
 @Component({
   selector: 'app-home',
@@ -23,8 +24,10 @@ export class HomeComponent implements OnInit {
   items: MenuItem[] = [];
   @ViewChild('menu') menu!: Menu;
   assing : boolean = false;
+  sesionActive : boolean = false;
 
   hotel : any = null;
+
 
   constructor(
     private readonly _hotelService: HotelService,
@@ -32,9 +35,19 @@ export class HomeComponent implements OnInit {
     private readonly router: Router,
     private readonly _roomService: RoomService,
     private readonly _toastr: ToastrService,
+    private readonly _bookingService: BookingService
   ) {}
 
   ngOnInit(): void {
+
+    const userJSON = sessionStorage.getItem('user');
+    if (userJSON !== null) {
+      const user = JSON.parse(userJSON);
+      this.sesionActive = true;
+    } else {
+      console.log('no inicio sesion');
+      this.sesionActive = false;
+    }
     this._hotelService.gethotels().subscribe((res) => {
       this.hoteles = res.data;
       console.log(this.hoteles)
@@ -97,7 +110,10 @@ export class HomeComponent implements OnInit {
   }
 
   openMenu(room: any, event: any): void {
-    console.log(room);
+    if(!room.enabled){
+      this._toastr.error("Habitacion no disponible", 'Error');
+      return ;
+    }
     this.items = [
       {
         label: 'Reservar',
@@ -105,6 +121,7 @@ export class HomeComponent implements OnInit {
         id: room.id,
         command: (event) => {
           let { item } = event;
+          this._bookingService.setHotel(room,this.hotel);
           this.router.navigate(['/home/booking']);
         },
       },
@@ -113,7 +130,6 @@ export class HomeComponent implements OnInit {
   }
 
   openAssing(room: any, event: any): void {
-    console.log(room);
     if(!room.enabled){
       this._toastr.error("Habitacion no disponible", 'Error');
       return ;

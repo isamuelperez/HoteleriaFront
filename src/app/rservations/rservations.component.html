@@ -1,0 +1,115 @@
+<p-table *ngIf="sesionActive"
+  #dt
+  styleClass="p-datatable-sm"
+  [rowHover]="true"
+  [value]="reservations"
+  [(selection)]="reservations"
+  [globalFilterFields]="[
+    'name',
+    'type',
+    'location',
+    'enabled',
+    'maxCount',
+    'hotel.name'
+  ]"
+  dataKey="id"
+  [rowHover]="true"
+  [rows]="10"
+  [showCurrentPageReport]="true"
+  [rowsPerPageOptions]="[10, 20, 50]"
+  [paginator]="true"
+>
+  <ng-template pTemplate="caption">
+    <div class="table-header d-flex">
+      <label for="" class="fs-1 pb-3">Reservaciones</label>
+    </div>
+    <div class="text-center">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          #query
+          pInputText
+          type="text"
+          (input)="dt.filterGlobal(query.value, 'contains')"
+          placeholder="Búsqueda Global"
+        />
+      </span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th></th>
+      <th pSortableColumn="hotel.name">
+        HOTEL<p-sortIcon field="hotel.name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="hotel.room.name">
+        HABITACIÓN<p-sortIcon field="hotel.room.name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="client.name">
+        CLIENTE<p-sortIcon field="client.name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="initDate">
+        Reserva<p-sortIcon field="initDate"></p-sortIcon>
+      </th>
+      <th pSortableColumn="emergencyContact.fullName">
+        CONTACTO DE EMERGENCIA <p-sortIcon field="emergencyContact.fullName"></p-sortIcon>
+      </th>
+      <th pSortableColumn="user.userName">
+        USUARIO RESPONSABLE <p-sortIcon field="user.userName"></p-sortIcon>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-reservation>
+    <tr>
+      <td>
+        <button class="border border-solid border-gray-400 rounded-lg p-1">
+          <i
+            class="pi pi-ellipsis-v"
+            (click)="openMenu(reservation, $event)"
+          ></i>
+        </button>
+      </td>
+      <td>
+        <ul>
+          <li>{{ reservation.hotel.name }}</li>
+          <li>{{ reservation.hotel.location.city }}</li>
+          <li>{{ reservation.hotel.location.address }}</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>{{ reservation.hotel.room.name }}</li>
+          <li>{{ typeRoom(reservation.hotel.room.type) }}</li>
+          <li>{{ reservation.hotel.room.location }}</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>
+            {{ reservation.client.name + " " + reservation.client.surname }}
+          </li>
+          <li>{{ reservation.client.numberDocument }}</li>
+          <li>{{ reservation.client.phone }}</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>{{ reservation.initDate }}</li>
+          <li>{{ reservation.endDate }}</li>
+          <li>{{ reservation.personCount }}</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>{{ reservation.emergencyContact.fullName }}</li>
+          <li>{{ reservation.emergencyContact.numberContact }}</li>
+        </ul>
+      </td>
+      <td>{{ reservation.user.userName }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<div class="text-center">
+  <p-menu #menu [model]="items" [popup]="true"></p-menu>
+</div>

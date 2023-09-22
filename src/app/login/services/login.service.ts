@@ -16,7 +16,6 @@ export class LoginService {
   }
 
   Authentication(user: User): Observable<any> {
-    console.log(user)
     return this.http.post(`${environment.host}/User/Authentication`,user);
   }
 

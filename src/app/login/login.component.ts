@@ -61,6 +61,7 @@ export class LoginComponent implements OnInit {
               password: null
             })
 
+            sessionStorage.setItem('user', JSON.stringify(res.data.token));
             this._cookieService.set('token',res.data.token );
 
 

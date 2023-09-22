@@ -24,6 +24,7 @@ import {CookieService} from 'ngx-cookie-service';
 import { RoomComponent } from './room/room.component';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { HotelComponent } from './hotel/hotel.component';
+import { RservationsComponent } from './rservations/rservations.component';
 
 
 
@@ -34,7 +35,8 @@ import { HotelComponent } from './hotel/hotel.component';
     HomeComponent,
     BookingComponent,
     RoomComponent,
-    HotelComponent
+    HotelComponent,
+    RservationsComponent
   ],
   imports: [
     BrowserModule,

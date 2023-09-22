@@ -6,6 +6,7 @@ import { BookingComponent } from './booking/booking.component';
 import { userGuard } from './user-guard.guard';
 import { RoomComponent } from './room/room.component';
 import { HotelComponent } from './hotel/hotel.component';
+import { RservationsComponent } from './rservations/rservations.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -25,6 +26,10 @@ const routes: Routes = [
   {
     path: 'home/hotel',
     component: HotelComponent,
+  },
+  {
+    path: 'home/reservaciones',
+    component: RservationsComponent,
   },
 
   { path: '**', pathMatch: 'full', redirectTo: 'login' },

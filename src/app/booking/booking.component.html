@@ -3,7 +3,8 @@
     <div class="p-fluid">
       <form action="" [formGroup]="bookingForm">
         <label for="" class="display-1 mb-3">RESERVACIÓN</label>
-        <div>
+        <h2 class="text-center mt-3">Datos de la Reserva</h2>
+        <div class="">
           <div class="field">
             <label for="name">Nombres</label>
             <input pInputText id="name" type="text" formControlName="name" />
@@ -71,7 +72,7 @@
           </div>
           <div class="field">
             <label for="numberDocument">Numero de Documento</label>
-            <input pInputText id="numberDocument" type="number" formControlName="numberDocument" />
+            <input pInputText id="numberDocument" type="text" formControlName="numberDocument" />
             <div
               *ngIf="
                 bookingForm.controls['numberDocument'].invalid &&
@@ -146,7 +147,6 @@
               </small>
             </div>
           </div>
-
           <div class="field">
             <label for="email">Fecha de Nacimiento</label>
             <p-calendar formControlName="birthDate" [showIcon]="true"></p-calendar>
@@ -165,37 +165,89 @@
             </div>
           </div>
         </div>
+        <h2 class="text-center mt-3">Datos de la Reserva</h2>
+        <div class="field">
+          <label for="initDate">Fecha de entrada</label>
+          <p-calendar formControlName="initDate" [showIcon]="true" [showTime]="true" [showSeconds]="true"></p-calendar>
+          <div
+            *ngIf="
+              bookingForm.controls['initDate'].invalid &&
+              bookingForm.controls['initDate'].touched
+            "
+          >
+            <small
+              class="text-danger text-sm"
+              *ngIf="bookingForm.controls['initDate'].errors"
+            >
+              Campo requerido
+            </small>
+          </div>
+        </div>
+        <div class="field">
+          <label for="endDate">Fecha de entrada</label>
+          <p-calendar formControlName="endDate" [showIcon]="true" [showTime]="true" [showSeconds]="true"></p-calendar>
+          <div
+            *ngIf="
+              bookingForm.controls['endDate'].invalid &&
+              bookingForm.controls['endDate'].touched
+            "
+          >
+            <small
+              class="text-danger text-sm"
+              *ngIf="bookingForm.controls['endDate'].errors"
+            >
+              Campo requerido
+            </small>
+          </div>
+        </div>
+        <div class="field">
+          <label for="personCount">Cantidad de Personas</label>
+          <input pInputText id="personCount" type="text" formControlName="personCount" />
+          <div
+            *ngIf="
+              bookingForm.controls['personCount'].invalid &&
+              bookingForm.controls['personCount'].touched
+            "
+          >
+            <small
+              class="text-danger text-sm"
+              *ngIf="bookingForm.controls['personCount'].errors"
+            >
+              Campo requerido
+            </small>
+          </div>
+        </div>
         <h2 class="text-center mt-3">Contacto de Emergencia</h2>
-        <div>
-          <div class="field">
-            <label for="nameEmergncy">Nombre Completo</label>
-            <input pInputText id="nameEmergncy" type="text" formControlName="nameEmergncy" />
+        <div class="d-flex">
+          <div class="field m-3">
+            <label for="fullName">Nombre Completo</label>
+            <input pInputText id="fullName" type="text" formControlName="fullName" />
             <div
               *ngIf="
-                bookingForm.controls['nameEmergncy'].invalid &&
-                bookingForm.controls['nameEmergncy'].touched
+                bookingForm.controls['fullName'].invalid &&
+                bookingForm.controls['fullName'].touched
               "
             >
               <small
                 class="text-danger text-sm"
-                *ngIf="bookingForm.controls['nameEmergncy'].errors"
+                *ngIf="bookingForm.controls['fullName'].errors"
               >
                 Campo requerido
               </small>
             </div>
           </div>
-          <div class="field">
-            <label for="phoneEmergncy">Telefono</label>
-            <input pInputText id="phoneEmergncy" type="tel" formControlName="phoneEmergncy" />
+          <div class="field m-3">
+            <label for="numberContact">Telefono</label>
+            <input pInputText id="numberContact" type="tel" formControlName="numberContact" />
             <div
               *ngIf="
-                bookingForm.controls['phoneEmergncy'].invalid &&
-                bookingForm.controls['phoneEmergncy'].touched
+                bookingForm.controls['numberContact'].invalid &&
+                bookingForm.controls['numberContact'].touched
               "
             >
               <small
                 class="text-danger text-sm"
-                *ngIf="bookingForm.controls['phoneEmergncy'].errors"
+                *ngIf="bookingForm.controls['numberContact'].errors"
               >
                 Campo requerido
               </small>
@@ -205,7 +257,6 @@
         <div class="mt-3">
           <p-button
             label="Reservar"
-            [disabled]="!bookingForm.valid"
             (onClick)="onSubmit()"
           ></p-button>
         </div>

@@ -4,7 +4,7 @@
   [rowHover]="true"
   [value]="rooms"
   [(selection)]="rooms"
-  [globalFilterFields]="['name', 'type', 'location', 'enabled', 'maxCount']"
+  [globalFilterFields]="['name', 'type', 'location', 'enabled', 'maxCount', 'hotel.name']"
   dataKey="id"
   [rowHover]="true"
   [rows]="10"
@@ -27,7 +27,7 @@
           placeholder="Búsqueda Global"
         />
       </span>
-      <p-button
+      <p-button *ngIf="sesionActive"
         class="p-2"
         label="Agregar Habitación"
         [disabled]=""
@@ -37,9 +37,12 @@
   </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th></th>
+      <th *ngIf="sesionActive"></th>
       <th pSortableColumn="name">
         HABITACIÓN<p-sortIcon field="name"></p-sortIcon>
+      </th>
+      <th pSortableColumn="hotel.name">
+        HOTEL<p-sortIcon field="hotel.name"></p-sortIcon>
       </th>
       <th pSortableColumn="type">TIPO<p-sortIcon field="type"></p-sortIcon></th>
       <th pSortableColumn="location">
@@ -62,12 +65,13 @@
   </ng-template>
   <ng-template pTemplate="body" let-room>
     <tr>
-      <td>
+      <td *ngIf="sesionActive">
         <button class="border border-solid border-gray-400 rounded-lg p-1">
           <i class="pi pi-ellipsis-v" (click)="openMenu(room, $event)"></i>
         </button>
       </td>
       <td>{{ room.name }}</td>
+      <td>{{ room.hotel.name }}</td>
       <td>{{ typeRoom(room.type) }}</td>
       <td>{{ room.location }}</td>
       <td>{{ room.maxCount }}</td>
@@ -90,7 +94,7 @@
         <form action="" [formGroup]="roomForm">
           <div>
 
-            <div *ngIf="addNew" class="field">
+            <div class="field">
               <label for="hotel">Hotel</label>
               <p-dropdown
                 [options]="hoteles"
@@ -98,19 +102,19 @@
                 [filter]="true"
                 filterBy="name"
                 [showClear]="true"
+                optionValue="id"
                 optionLabel="name"
-                (onChange)="HotelSelect($event)"
-                formControlName="hotel"
+                formControlName="hotelId"
               ></p-dropdown>
               <div
                 *ngIf="
-                  roomForm.controls['hotel'].invalid &&
-                  roomForm.controls['hotel'].touched
+                  roomForm.controls['hotelId'].invalid &&
+                  roomForm.controls['hotelId'].touched
                 "
               >
                 <small
                   class="text-danger text-sm"
-                  *ngIf="roomForm.controls['hotel'].errors"
+                  *ngIf="roomForm.controls['hotelId'].errors"
                 >
                   Campo requerido
                 </small>
@@ -278,47 +282,6 @@
               styleClass="mt-3"
               label="Cancelar"
               (onClick)="close()"
-            ></p-button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</p-dialog>
-
-<p-dialog [(visible)]="assignRoom" [style]="{ width: '30vw', height:'30vw' }">
-  <ng-template pTemplate="header">Asignar Habitación ({{title_room}})</ng-template>
-  <div class="grid">
-    <div class="">
-      <div class="p-fluid">
-        <form action="" [formGroup]="roomForm">
-          <div>
-            <div class="field">
-              <label for="type">Hotel</label>
-              <p-dropdown
-                [options]="hoteles"
-                placeholder="Seleccione"
-                [filter]="true"
-                filterBy="name"
-                [showClear]="true"
-                optionLabel="name"
-                optionValue="id"
-                formControlName="selectHotel"
-              ></p-dropdown>
-            </div>
-          </div>
-          <hr />
-
-          <div class="mt-3">
-            <p-button
-              label="Guardar"
-              [disabled]="roomForm.controls['selectHotel'].invalid"
-              (onClick)="onSubmitAssignHotel()"
-            ></p-button>
-            <p-button
-              styleClass="mt-3"
-              label="Cancelar"
-              (onClick)="closeAssign()"
             ></p-button>
           </div>
         </form>

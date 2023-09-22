@@ -11,14 +11,15 @@ export class RoomService {
   constructor(private readonly http:  HttpClient) {}
 
   createRoom(room: any): Observable<any> {
+    console.log(room)
     return this.http.post(`${environment.host}/Room/create`, room);
   }
 
 
-  updateRoom(room: any, id: number, hotel: any): Observable<any> {
+  updateRoom(room: any, id: number): Observable<any> {
     room.id = id;
-    room.hotel=hotel;
-    return this.http.post(`${environment.host}/Room/update`, room);
+    console.log(room)
+    return this.http.put(`${environment.host}/Room/update`, room);
   }
 
   getRooms(): Observable<any> {
