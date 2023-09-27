@@ -5,35 +5,36 @@ import { environment } from 'src/environments/environment';
 import { User } from '../models/user.models';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoginService {
+  private isAutentifaction: boolean = false;
 
-  constructor(private readonly http:  HttpClient) {}
+  private user : any = null;
+
+  constructor(private readonly http: HttpClient) {}
+
+  setAutentication(autentication: boolean) {
+    this.isAutentifaction = autentication;
+  }
+
+  getAutentication(): boolean {
+    return this.isAutentifaction;
+  }
+
+  setUser(user: any){
+    this.user = user;
+  }
+
+  getUser(): any{
+    return this.user;
+  }
 
   gethotels(): Observable<any> {
     return this.http.get(`${environment.host}/Hotel/getAll/`);
   }
 
   Authentication(user: User): Observable<any> {
-    return this.http.post(`${environment.host}/User/Authentication`,user);
+    return this.http.post(`${environment.host}/User/Authentication`, user);
   }
-
-  //getTeam(id: number): Observable<any> {
-  //  return this.http.get(`${this.apiUrl}/consultar/${id}`);
-  //}
-//
-//
-  //createTeam(equipoData: any): Observable<any> {
-  //  return this.http.post(`${this.apiUrl}/crear`, equipoData);
-  //}
-//
-  //updateTeam(id: number, equipoData: any): Observable<any> {
-  //  return this.http.put(`${this.apiUrl}/actualizar/${id}`, equipoData);
-  //}
-//
-  //deleteTeam(id: number): Observable<any> {
-  //  return this.http.delete(`${this.apiUrl}/eliminar/${id}`);
-  //}
-
 }

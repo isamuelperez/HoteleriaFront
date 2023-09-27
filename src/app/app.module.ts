@@ -10,7 +10,7 @@ import { PanelModule } from 'primeng/panel';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { HomeComponent } from './home/home.component';
 import { DialogModule } from 'primeng/dialog';
@@ -25,6 +25,7 @@ import { RoomComponent } from './room/room.component';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { HotelComponent } from './hotel/hotel.component';
 import { RservationsComponent } from './rservations/rservations.component';
+import { JwtInterceptorInterceptor } from './jwt-interceptor.interceptor';
 
 
 
@@ -58,7 +59,8 @@ import { RservationsComponent } from './rservations/rservations.component';
     InputSwitchModule,
     ToastrModule.forRoot(),
   ],
-  providers: [CookieService],
+  providers: [CookieService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -11,7 +11,6 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class BookingComponent implements OnInit {
   bookingForm!: FormGroup;
-  user: any = null;
 
   genders: Array<any> = [
     {
@@ -41,29 +40,18 @@ export class BookingComponent implements OnInit {
       name: 'Cedula de Extranjera',
       id: 3,
     },
-  ]
+  ];
 
   submitted = false;
-
-  sesionActive: boolean = false;
 
   constructor(
     private readonly builder: FormBuilder,
     private readonly router: Router,
     private readonly _bookingService: BookingService,
-    private readonly _toastr: ToastrService,
+    private readonly _toastr: ToastrService
   ) {}
 
   ngOnInit() {
-    const userJSON = sessionStorage.getItem('user');
-    if (userJSON !== null) {
-      const user = JSON.parse(userJSON);
-      this.sesionActive = true;
-    } else {
-      this._toastr.error('Inicie Sesion', 'inicar sesion');
-      console.log('no inicio sesion');
-      this.sesionActive = false;
-    }
     this.bookingForm = this.buildForm();
   }
 
@@ -86,14 +74,15 @@ export class BookingComponent implements OnInit {
       //reserva
       initDate: ['', [Validators.required]],
       endDate: ['', [Validators.required]],
-      personCount : ['', [Validators.required]],
+      personCount: ['', [Validators.required]],
     });
   }
 
   onSubmit() {
-    if(this._bookingService.room!=null){
+    if (this._bookingService.room != null) {
       this._bookingService.createReservation(this.bookingForm.value).subscribe({
         error: (error) => {
+          console.log(error.error.message);
           this._toastr.error(error.error.message, 'Error');
           throw error;
         },
@@ -106,8 +95,8 @@ export class BookingComponent implements OnInit {
           }
         },
       });
-    }else{
-      this._toastr.error("Seleccione una habitacion de un hotel", 'Error');
+    } else {
+      this._toastr.error('Seleccione una habitacion de un hotel', 'Error');
       this.router.navigate(['/home']);
     }
   }

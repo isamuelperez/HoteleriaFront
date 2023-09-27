@@ -9,6 +9,7 @@ import { LoginService } from './services/login.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -40,9 +41,6 @@ export class LoginComponent implements OnInit {
     });
   }
 
-
-
-
   onSubmit() {
     this._loginService
       .Authentication(this.loginForm.value)
@@ -61,10 +59,10 @@ export class LoginComponent implements OnInit {
               password: null
             })
 
-            sessionStorage.setItem('user', JSON.stringify(res.data.token));
+            this._loginService.setAutentication(true)
+            this._loginService.setUser(res.data);
+            sessionStorage.setItem('user', JSON.stringify(res.data));
             this._cookieService.set('token',res.data.token );
-
-
             this.router.navigate(['/home'])
           }
       }});

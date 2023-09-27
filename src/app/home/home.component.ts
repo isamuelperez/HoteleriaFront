@@ -24,7 +24,6 @@ export class HomeComponent implements OnInit {
   items: MenuItem[] = [];
   @ViewChild('menu') menu!: Menu;
   assing : boolean = false;
-  sesionActive : boolean = false;
 
   hotel : any = null;
 
@@ -35,19 +34,12 @@ export class HomeComponent implements OnInit {
     private readonly router: Router,
     private readonly _roomService: RoomService,
     private readonly _toastr: ToastrService,
-    private readonly _bookingService: BookingService
+    private readonly _bookingService: BookingService,
+    private readonly _loginService: LoginService,
   ) {}
 
   ngOnInit(): void {
 
-    const userJSON = sessionStorage.getItem('user');
-    if (userJSON !== null) {
-      const user = JSON.parse(userJSON);
-      this.sesionActive = true;
-    } else {
-      console.log('no inicio sesion');
-      this.sesionActive = false;
-    }
     this._hotelService.gethotels().subscribe((res) => {
       this.hoteles = res.data;
       console.log(this.hoteles)
@@ -62,6 +54,10 @@ export class HomeComponent implements OnInit {
       this.cities = res.data;
       this.test();
     });
+  }
+
+  get user() {
+    return this._loginService.getUser();
   }
 
   nombresUnicos: any = [];
@@ -121,6 +117,7 @@ export class HomeComponent implements OnInit {
         id: room.id,
         command: (event) => {
           let { item } = event;
+          room.type=this.roomType(room.type)
           this._bookingService.setHotel(room,this.hotel);
           this.router.navigate(['/home/booking']);
         },
@@ -170,5 +167,20 @@ export class HomeComponent implements OnInit {
     this.display = false;
     this.assing = false;
     this.assing = true;
+  }
+
+  roomType(type: string): number {
+    switch (type) {
+      case 'Individual':
+        return 0;
+      case 'Doble':
+        return 1;
+      case 'Matrimonial':
+        return 2;
+      case 'Familiar':
+        return 3;
+      default:
+        return -1;
+    }
   }
 }

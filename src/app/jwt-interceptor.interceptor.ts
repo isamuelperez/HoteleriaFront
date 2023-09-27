@@ -3,24 +3,30 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor
+  HttpInterceptor,
+  HttpHeaders,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service';
-import { Router } from '@angular/router';
+import { LoginService } from './login/services/login.service';
 
 @Injectable()
 export class JwtInterceptorInterceptor implements HttpInterceptor {
+  constructor(
+    private readonly _loginService: LoginService
+  ) {}
 
-  constructor(private readonly cookieService: CookieService, private readonly router: Router) {}
-  private authReq : any;
+  intercept(
+    request: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const token: string = this.cookieService.get('token');
-
-    if(token){
-      this.authReq = request.clone({headers: request.headers.set('authorization', 'Bearer'+ token)});
+    if(request.url.endsWith('/User/Authentication')){
+      return next.handle(request);
     }
-    return next.handle(this.authReq);
+    const token: string = this._loginService.getUser().token;
+
+    let headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    request = request.clone({ headers });
+    return next.handle(request);
   }
 }

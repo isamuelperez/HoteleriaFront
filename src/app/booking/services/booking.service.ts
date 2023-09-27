@@ -19,7 +19,6 @@ export class BookingService {
   setHotel(room:any, hotel: any){
     this.room = room;
     this.hotel = hotel
-    console.log(this.room)
   }
 
   createReservation(request: any): Observable<any> {
@@ -62,7 +61,7 @@ export class BookingService {
       updateRoomRequest: updateRoomRequest
     }
 
-    console.log(req)
+    console.log(req);
     return this.http.post(`${environment.host}/Reservation/create/`, req);
   }
 }

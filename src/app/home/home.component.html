@@ -10,7 +10,7 @@
       optionLabel="name"
       (onChange)="selectCiy($event)"
     ></p-dropdown>
-    <p-button *ngIf="sesionActive"
+    <p-button *ngIf="user.type==1"
       class="p-3"
       label="Gestionar Hoteles"
       (onClick)="addHotel()"

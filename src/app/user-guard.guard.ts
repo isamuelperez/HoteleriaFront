@@ -8,6 +8,7 @@ import {
 } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
+import { LoginService } from './login/services/login.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,11 +16,13 @@ import { Observable } from 'rxjs';
 export class userGuard implements CanActivate {
   constructor(
     private readonly _cookieService: CookieService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly _loginService : LoginService
   ) {}
+
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    state: RouterStateSnapshot,
   ):
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
@@ -27,11 +30,10 @@ export class userGuard implements CanActivate {
     | UrlTree {
     const cookie = this._cookieService.check('token');
 
-    if (!cookie) {
+    if (!this._loginService.getAutentication()) {
       this.router.navigate(['', 'login']);
       return false;
     } else {
-      console.log("guard")
       return true;
     }
   }

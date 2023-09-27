@@ -12,15 +12,17 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
     path: 'home',
-    //canActivate: [userGuard],
+    canActivate: [userGuard],
     component: HomeComponent,
   },
   {
     path: 'home/booking',
+    canActivate: [userGuard],
     component: BookingComponent,
   },
   {
     path: 'home/room',
+    canActivate: [userGuard],
     component: RoomComponent,
   },
   {
@@ -29,6 +31,7 @@ const routes: Routes = [
   },
   {
     path: 'home/reservaciones',
+    canActivate: [userGuard],
     component: RservationsComponent,
   },
 

@@ -1,7 +1,7 @@
 
 
 <!-- Toolbar -->
-<div class="toolbar" role="banner">
+<div *ngIf="isAutentication" class="toolbar" role="banner">
   <img
     width="40"
     alt="Angular Logo"
@@ -9,11 +9,11 @@
   />
   <ul class="d-flex flex-row">
     <a class="mt-2" routerLink="/home">Hoteles</a>
-    <a class="mt-2" routerLink="/home/room">Habitaciones</a>
-    <a class="mt-2" routerLink="/home/reservaciones">Reservaciones</a>
+    <a *ngIf="user.type==1" class="mt-2" routerLink="/home/room">Habitaciones</a>
+    <a *ngIf="user.type==1" class="mt-2" routerLink="/home/reservaciones">Reservaciones</a>
   </ul>
   <div class="spacer"></div>
-  <p-button label="Login" (onClick)="login()"></p-button>
+  <p-button label="LogOut" (onClick)="login()"></p-button>
 </div>
 
 <div class="content" role="main">
